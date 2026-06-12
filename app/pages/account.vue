@@ -57,66 +57,77 @@ function formatDate(d: string | null) {
   <div class="row justify-content-center">
     <div class="col-lg-8">
 
-      <!-- Profile -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-          <i class="fa-solid fa-circle-user me-2 text-primary"></i>My Profile
+      <!-- account page title -->
+      <div class="mb-4">
+        <h2 class="fw-bold text-white mb-0">
+          <i class="fa-solid fa-circle-user me-2" style="color:#64b5f6"></i>Account
+        </h2>
+        <div class="gradient-bar mt-1" style="width:50px"></div>
+      </div>
+
+      <!-- user profile info -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="fa-solid fa-id-card" style="color:#64b5f6"></i>
+          <span class="fw-semibold">My Profile</span>
         </div>
-        <div class="card-body" v-if="profile">
+        <div class="card-body p-4" v-if="profile">
           <div class="row g-3">
             <div class="col-sm-6">
-              <p class="text-muted small mb-0">Username</p>
-              <p class="fw-semibold mb-0">{{ profile.username }}</p>
+              <p class="small mb-0" style="color:rgba(255,255,255,0.45)">Username</p>
+              <p class="fw-semibold text-white mb-0">{{ profile.username }}</p>
             </div>
             <div class="col-sm-6">
-              <p class="text-muted small mb-0">Email</p>
-              <p class="fw-semibold mb-0">{{ profile.email }}</p>
+              <p class="small mb-0" style="color:rgba(255,255,255,0.45)">Email</p>
+              <p class="fw-semibold text-white mb-0">{{ profile.email }}</p>
             </div>
             <div class="col-sm-6">
-              <p class="text-muted small mb-0">Member since</p>
-              <p class="mb-0">{{ formatDate(profile.createdAt) }}</p>
+              <p class="small mb-0" style="color:rgba(255,255,255,0.45)">Member since</p>
+              <p class="mb-0" style="color:rgba(255,255,255,0.75)">{{ formatDate(profile.createdAt) }}</p>
             </div>
             <div class="col-sm-6">
-              <p class="text-muted small mb-0">Last login</p>
-              <p class="mb-0">{{ formatDate(profile.lastLoginAt) }}</p>
+              <p class="small mb-0" style="color:rgba(255,255,255,0.45)">Last login</p>
+              <p class="mb-0" style="color:rgba(255,255,255,0.75)">{{ formatDate(profile.lastLoginAt) }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Task Stats -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-          <i class="fa-solid fa-chart-bar me-2 text-success"></i>Task Summary
+      <!-- task count summary -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="fa-solid fa-chart-bar" style="color:#a5d6a7"></i>
+          <span class="fw-semibold">Task Summary</span>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
           <div class="row g-3 text-center">
             <div class="col-3">
-              <div class="fs-3 fw-bold">{{ taskStats.total }}</div>
-              <div class="text-muted small">Total</div>
+              <div class="stat-number">{{ taskStats.total }}</div>
+              <div class="stat-label">Total</div>
             </div>
             <div class="col-3">
-              <div class="fs-3 fw-bold text-secondary">{{ taskStats.todo }}</div>
-              <div class="text-muted small">To Do</div>
+              <div class="stat-number" style="color:rgba(255,255,255,0.55)">{{ taskStats.todo }}</div>
+              <div class="stat-label">To Do</div>
             </div>
             <div class="col-3">
-              <div class="fs-3 fw-bold text-primary">{{ taskStats.inProgress }}</div>
-              <div class="text-muted small">In Progress</div>
+              <div class="stat-number" style="color:#64b5f6">{{ taskStats.inProgress }}</div>
+              <div class="stat-label">In Progress</div>
             </div>
             <div class="col-3">
-              <div class="fs-3 fw-bold text-success">{{ taskStats.done }}</div>
-              <div class="text-muted small">Done</div>
+              <div class="stat-number" style="color:#a5d6a7">{{ taskStats.done }}</div>
+              <div class="stat-label">Done</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Edit Username -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-          <i class="fa-solid fa-pen me-2 text-info"></i>Edit Username
+      <!-- form to change username -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="fa-solid fa-pen" style="color:#80deea"></i>
+          <span class="fw-semibold">Edit Username</span>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
           <div class="alert alert-success py-2" v-if="saveSuccess">Username updated successfully!</div>
           <div class="alert alert-danger py-2" v-if="saveError">{{ saveError }}</div>
           <div class="d-flex gap-2">
@@ -128,10 +139,11 @@ function formatDate(d: string | null) {
         </div>
       </div>
 
-      <!-- All Users -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-          <i class="fa-solid fa-users me-2 text-warning"></i>All Users
+      <!-- table showing all registered users -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="fa-solid fa-users" style="color:#ffe082"></i>
+          <span class="fw-semibold">All Users</span>
         </div>
         <div class="table-responsive">
           <table class="table table-sm table-hover mb-0" v-if="allUsers?.length">
@@ -145,23 +157,26 @@ function formatDate(d: string | null) {
             </thead>
             <tbody>
               <tr v-for="u in allUsers" :key="u.userId">
-                <td class="text-muted">{{ u.userId }}</td>
-                <td>{{ u.username }}</td>
-                <td class="text-muted">{{ u.email }}</td>
-                <td class="text-muted">{{ formatDate(u.createdAt) }}</td>
+                <td style="color:rgba(255,255,255,0.4)">{{ u.userId }}</td>
+                <td class="text-white">{{ u.username }}</td>
+                <td style="color:rgba(255,255,255,0.5)">{{ u.email }}</td>
+                <td style="color:rgba(255,255,255,0.5)">{{ formatDate(u.createdAt) }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Danger Zone -->
-      <div class="card shadow-sm border-danger">
-        <div class="card-header text-danger fw-semibold border-danger">
-          <i class="fa-solid fa-triangle-exclamation me-2"></i>Danger Zone
+      <!-- delete account section -->
+      <div class="card border-danger">
+        <div class="card-header d-flex align-items-center gap-2 border-danger">
+          <i class="fa-solid fa-triangle-exclamation" style="color:#ef9a9a"></i>
+          <span class="fw-semibold" style="color:#ef9a9a">Danger Zone</span>
         </div>
-        <div class="card-body">
-          <p class="text-muted small mb-3">Permanently delete your account and all associated tasks. This cannot be undone.</p>
+        <div class="card-body p-4">
+          <p class="small mb-3" style="color:rgba(255,255,255,0.5)">
+            Permanently delete your account and all associated tasks. This cannot be undone.
+          </p>
           <button class="btn btn-danger" @click="deleteAccount">
             <i class="fa-solid fa-trash me-2"></i>Delete My Account
           </button>
@@ -171,3 +186,17 @@ function formatDate(d: string | null) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+</style>

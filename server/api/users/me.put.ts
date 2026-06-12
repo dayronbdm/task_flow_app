@@ -1,6 +1,7 @@
 import { AppDataSource } from '~~/server/db/data-source'
 import { User } from '~~/server/db/entities/User'
 
+// update the current user's username
 export default defineEventHandler(async (event) => {
   const { user } = await getUserSession(event)
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })
@@ -18,6 +19,7 @@ export default defineEventHandler(async (event) => {
   entity.username = username.trim()
   await repo.save(entity)
 
+  // update the session with the new username
   await setUserSession(event, {
     user: { id: entity.userId, email: entity.email, username: entity.username },
     secure: (await getUserSession(event)).secure

@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm'
 import { User } from './entities/User'
 import { Task } from './entities/Task'
 
+// this sets up the connection to the mysql database
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: process.env.DB_HOST || 'localhost',

@@ -2,6 +2,7 @@ import { IsNull } from 'typeorm'
 import { AppDataSource } from '~~/server/db/data-source'
 import { Task } from '~~/server/db/entities/Task'
 
+// update an existing task
 export default defineEventHandler(async (event) => {
   const { user } = await getUserSession(event)
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })
@@ -15,6 +16,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const repo = AppDataSource.getRepository(Task)
+
+  // make sure the task belongs to this user
   const task = await repo.findOneBy({ taskId: id, userId: (user as any).id, deletedAt: IsNull() })
   if (!task) throw createError({ statusCode: 404, message: 'Task not found' })
 

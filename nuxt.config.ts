@@ -1,10 +1,7 @@
-import fs from 'fs'
-import path from 'path'
-
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt config file, this is where i set up everything for the app
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: ['nuxt-auth-utils'],
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET || 'change-me-in-production',
@@ -41,14 +38,9 @@ export default defineNuxtConfig({
     }
   },
   devServer: {
-    https: true
-  },
-  vite: {
-    server: {
-      https: {
-        key: fs.readFileSync(path.resolve('./certs/localhost-key.pem')),
-        cert: fs.readFileSync(path.resolve('./certs/localhost.pem'))
-      }
+    https: {
+      key: './certs/localhost-key.pem',
+      cert: './certs/localhost.pem'
     }
   },
   nitro: {
@@ -57,7 +49,7 @@ export default defineNuxtConfig({
         tsconfigRaw: {
           compilerOptions: {
             experimentalDecorators: true,
-            // @ts-ignore
+            // needed for typeorm decorators to work
             emitDecoratorMetadata: true
           }
         }

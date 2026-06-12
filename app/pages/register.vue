@@ -29,14 +29,18 @@ async function submit() {
 
 <template>
   <div class="row justify-content-center">
-    <div class="col-md-5">
-      <div class="card shadow">
-        <div class="card-body p-4">
-          <div class="text-center mb-4">
-            <i class="fa-solid fa-list-check fa-2x text-primary mb-2"></i>
-            <h4 class="card-title mb-0">Create your account</h4>
-            <p class="text-muted small">Start tracking your tasks today</p>
+    <div class="col-md-5 col-lg-4">
+      <div class="card">
+        <!-- Gradient header bar -->
+        <div class="auth-card-header">
+          <div class="auth-icon-wrap">
+            <i class="fa-solid fa-user-plus"></i>
           </div>
+          <h4 class="mb-0 fw-bold text-white">Create your account</h4>
+          <p class="mb-0 mt-1" style="color:rgba(255,255,255,0.6);font-size:.875rem">Start tracking your tasks today</p>
+        </div>
+
+        <div class="card-body p-4">
           <div class="alert alert-danger py-2" v-if="error">{{ error }}</div>
           <form @submit.prevent="submit">
             <div class="mb-3">
@@ -56,11 +60,32 @@ async function submit() {
               <i v-else class="fa-solid fa-user-plus me-2"></i>Create Account
             </button>
           </form>
-          <p class="mt-3 text-center text-muted small">
-            Already have an account? <RouterLink to="/login">Login</RouterLink>
+          <p class="mt-3 text-center small" style="color:rgba(255,255,255,0.45)">
+            Already have an account?
+            <RouterLink to="/login" style="color:#64b5f6">Login</RouterLink>
           </p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.auth-card-header {
+  background: linear-gradient(135deg, #0d2d6e, #1565c0);
+  border-radius: 0.375rem 0.375rem 0 0;
+  padding: 1.75rem 1.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.auth-icon-wrap {
+  width: 48px; height: 48px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  margin: 0 auto 0.75rem;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+</style>

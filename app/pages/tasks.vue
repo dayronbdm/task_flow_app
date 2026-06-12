@@ -68,10 +68,7 @@ async function saveTask() {
   formError.value = ''
   try {
     if (editing.value) {
-      await $fetch(`/api/tasks/${editing.value.taskId}`, {
-        method: 'PUT',
-        body: { ...form }
-      })
+      await $fetch(`/api/tasks/${editing.value.taskId}`, { method: 'PUT', body: { ...form } })
     } else {
       await $fetch('/api/tasks', { method: 'POST', body: { ...form } })
     }
@@ -83,14 +80,6 @@ async function saveTask() {
   } finally {
     saving.value = false
   }
-}
-
-async function quickStatus(task: any, status: string) {
-  await $fetch(`/api/tasks/${task.taskId}`, {
-    method: 'PUT',
-    body: { title: task.title, description: task.description, priority: task.priority, dueDate: task.dueDate, status }
-  })
-  await refresh()
 }
 
 async function deleteTask(task: any) {
@@ -119,29 +108,33 @@ function isOverdue(dueDate: string | null) {
 
 <template>
   <div>
-    <!-- Header -->
+    <!-- page title and new task button -->
     <div class="d-flex align-items-center justify-content-between mb-4">
       <div>
-        <h2 class="mb-0 fw-bold">
-          <i class="fa-solid fa-list-check me-2 text-primary"></i>My Tasks
+        <h2 class="mb-0 fw-bold text-white">
+          <i class="fa-solid fa-list-check me-2" style="color:#64b5f6"></i>My Tasks
         </h2>
-        <p class="text-muted small mb-0">{{ counts.all }} total &mdash; {{ counts.done }} completed</p>
+        <div class="gradient-bar mt-1" style="width:50px"></div>
+        <p class="mb-0 small" style="color:rgba(255,255,255,0.45)">
+          {{ counts.all }} total &mdash; {{ counts.done }} completed
+        </p>
       </div>
       <button class="btn btn-primary" @click="openNew">
         <i class="fa-solid fa-plus me-1"></i>New Task
       </button>
     </div>
 
-    <!-- New / Edit Form -->
-    <div class="card mb-4 border-primary" v-if="showForm">
-      <div class="card-header bg-primary bg-opacity-10 fw-semibold">
-        <i class="fa-solid fa-pen me-2"></i>{{ editing ? 'Edit Task' : 'New Task' }}
+    <!-- form to create or edit a task -->
+    <div class="card mb-4 task-form-card" v-if="showForm">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="fa-solid fa-pen" style="color:#64b5f6"></i>
+        <span class="fw-semibold">{{ editing ? 'Edit Task' : 'New Task' }}</span>
       </div>
-      <div class="card-body">
+      <div class="card-body p-4">
         <div class="alert alert-danger py-2" v-if="formError">{{ formError }}</div>
         <div class="row g-3">
           <div class="col-12">
-            <label class="form-label">Title <span class="text-danger">*</span></label>
+            <label class="form-label">Title <span style="color:#ef9a9a">*</span></label>
             <input v-model="form.title" type="text" class="form-control" placeholder="What needs to be done?" />
           </div>
           <div class="col-12">
@@ -169,7 +162,7 @@ function isOverdue(dueDate: string | null) {
             <input v-model="form.dueDate" type="date" class="form-control" />
           </div>
         </div>
-        <div class="d-flex gap-2 mt-3">
+        <div class="d-flex gap-2 mt-4">
           <button class="btn btn-primary" @click="saveTask" :disabled="saving">
             <span v-if="saving" class="spinner-border spinner-border-sm me-1"></span>
             <i v-else class="fa-solid fa-floppy-disk me-1"></i>Save Task
@@ -179,8 +172,8 @@ function isOverdue(dueDate: string | null) {
       </div>
     </div>
 
-    <!-- Filter Tabs -->
-    <ul class="nav nav-pills mb-4 gap-1">
+    <!-- filter buttons by status -->
+    <ul class="nav nav-pills mb-4 gap-1 flex-wrap">
       <li class="nav-item" v-for="f in ['all','todo','in_progress','done']" :key="f">
         <button
           class="nav-link"
@@ -188,26 +181,30 @@ function isOverdue(dueDate: string | null) {
           @click="activeFilter = f"
         >
           {{ f === 'all' ? 'All' : statusLabel(f) }}
-          <span class="badge ms-1" :class="activeFilter === f ? 'bg-light text-dark' : 'bg-secondary'">
+          <span class="badge ms-1" :class="activeFilter === f ? 'bg-white text-dark' : 'bg-secondary'">
             {{ counts[f as keyof typeof counts] }}
           </span>
         </button>
       </li>
     </ul>
 
-    <!-- Task List -->
+    <!-- list of tasks -->
     <div v-if="filtered.length > 0" class="d-flex flex-column gap-3">
       <div
         v-for="task in filtered"
         :key="task.taskId"
-        class="card"
-        :class="{ 'opacity-75': task.status === 'done' }"
+        class="card task-card"
+        :class="{ 'task-done': task.status === 'done' }"
       >
-        <div class="card-body">
+        <div class="card-body p-3">
           <div class="d-flex align-items-start justify-content-between gap-3">
             <div class="flex-grow-1">
               <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                <h6 class="mb-0 fw-semibold" :class="{ 'text-decoration-line-through text-muted': task.status === 'done' }">
+                <h6
+                  class="mb-0 fw-semibold"
+                  :class="task.status === 'done' ? 'text-decoration-line-through' : 'text-white'"
+                  :style="task.status === 'done' ? 'color:rgba(255,255,255,0.4)!important' : ''"
+                >
                   {{ task.title }}
                 </h6>
                 <span class="badge" :class="statusBadge(task.status)">{{ statusLabel(task.status) }}</span>
@@ -216,30 +213,21 @@ function isOverdue(dueDate: string | null) {
                   <i class="fa-solid fa-clock me-1"></i>Overdue
                 </span>
               </div>
-              <p v-if="task.description" class="text-muted small mb-1">{{ task.description }}</p>
-              <div class="d-flex gap-3 flex-wrap">
-                <small v-if="task.dueDate" class="text-muted">
+              <p v-if="task.description" class="small mb-1" style="color:rgba(255,255,255,0.5)">
+                {{ task.description }}
+              </p>
+              <div class="d-flex gap-3 flex-wrap mt-1">
+                <small v-if="task.dueDate" style="color:rgba(255,255,255,0.38)">
                   <i class="fa-regular fa-calendar me-1"></i>Due {{ task.dueDate }}
                 </small>
-                <small class="text-muted">
-                  <i class="fa-solid fa-clock me-1"></i>Created {{ new Date(task.createdAt).toLocaleDateString() }}
+                <small style="color:rgba(255,255,255,0.38)">
+                  <i class="fa-solid fa-clock me-1"></i>{{ new Date(task.createdAt).toLocaleDateString() }}
                 </small>
               </div>
             </div>
 
-            <!-- Actions -->
+            <!-- edit and delete buttons -->
             <div class="d-flex gap-2 flex-shrink-0">
-              <!-- Quick status -->
-              <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                  <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li><button class="dropdown-item" @click="quickStatus(task,'todo')"><span class="badge bg-secondary me-2">To Do</span></button></li>
-                  <li><button class="dropdown-item" @click="quickStatus(task,'in_progress')"><span class="badge bg-primary me-2">In Progress</span></button></li>
-                  <li><button class="dropdown-item" @click="quickStatus(task,'done')"><span class="badge bg-success me-2">Done</span></button></li>
-                </ul>
-              </div>
               <button class="btn btn-sm btn-outline-primary" @click="openEdit(task)" title="Edit">
                 <i class="fa-solid fa-pen"></i>
               </button>
@@ -252,10 +240,28 @@ function isOverdue(dueDate: string | null) {
       </div>
     </div>
 
-    <div v-else-if="!showForm" class="text-center py-5 text-muted">
-      <i class="fa-solid fa-inbox fa-3x mb-3 d-block opacity-25"></i>
-      <p v-if="activeFilter === 'all'">No tasks yet. Click <strong>New Task</strong> to get started.</p>
-      <p v-else>No tasks with status <strong>{{ statusLabel(activeFilter) }}</strong>.</p>
+    <div v-else-if="!showForm" class="text-center py-5">
+      <i class="fa-solid fa-inbox fa-3x mb-3 d-block" style="color:rgba(255,255,255,0.15)"></i>
+      <p style="color:rgba(255,255,255,0.4)">
+        <template v-if="activeFilter === 'all'">No tasks yet. Click <strong class="text-white">New Task</strong> to get started.</template>
+        <template v-else>No tasks with status <strong class="text-white">{{ statusLabel(activeFilter) }}</strong>.</template>
+      </p>
     </div>
   </div>
 </template>
+
+<style scoped>
+.task-form-card {
+  border-color: rgba(66, 165, 245, 0.3) !important;
+}
+.task-card {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.38) !important;
+}
+.task-done {
+  opacity: 0.65;
+}
+</style>

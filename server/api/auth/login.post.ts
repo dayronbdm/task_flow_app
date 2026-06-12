@@ -12,19 +12,24 @@ export default defineEventHandler(async (event) => {
   }
 
   const repo = AppDataSource.getRepository(User)
+
+  // look for a user with that email
   const user = await repo.findOneBy({ email })
   if (!user) {
     throw createError({ statusCode: 401, message: 'Invalid credentials' })
   }
 
+  // compare the password with the hashed one in the database
   const valid = await bcrypt.compare(password, user.passwordHash)
   if (!valid) {
     throw createError({ statusCode: 401, message: 'Invalid credentials' })
   }
 
+  // update the last login time
   user.lastLoginAt = new Date()
   await repo.save(user)
 
+  // create and return the jwt token
   const config = useRuntimeConfig(event)
   const token = await signToken(
     { userId: user.userId, email: user.email, username: user.username },

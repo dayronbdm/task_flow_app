@@ -2,6 +2,7 @@ import { IsNull } from 'typeorm'
 import { AppDataSource } from '~~/server/db/data-source'
 import { Task } from '~~/server/db/entities/Task'
 
+// get a single task by id
 export default defineEventHandler(async (event) => {
   const { user } = await getUserSession(event)
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })

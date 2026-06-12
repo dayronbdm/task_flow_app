@@ -1,6 +1,7 @@
 import { AppDataSource } from '~~/server/db/data-source'
 import { User } from '~~/server/db/entities/User'
 
+// get all users (only for logged in users)
 export default defineEventHandler(async (event) => {
   const { user } = await getUserSession(event)
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })

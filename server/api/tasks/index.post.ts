@@ -1,6 +1,7 @@
 import { AppDataSource } from '~~/server/db/data-source'
 import { Task } from '~~/server/db/entities/Task'
 
+// create a new task
 export default defineEventHandler(async (event) => {
   const { user } = await getUserSession(event)
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })
@@ -8,6 +9,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { title, description, priority, dueDate } = body
 
+  // title is required
   if (!title?.trim()) {
     throw createError({ statusCode: 400, message: 'Title is required' })
   }

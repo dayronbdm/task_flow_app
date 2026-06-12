@@ -7,6 +7,7 @@ import {
 } from 'typeorm'
 import { Task } from './Task'
 
+// user table - stores account info
 @Index('uq_user_email', ['email'], { unique: true })
 @Entity('user', { schema: 'sase_final_2026' })
 export class User {
@@ -28,6 +29,7 @@ export class User {
   @Column('datetime', { name: 'last_login_at', nullable: true })
   lastLoginAt: Date | null
 
+  // one user can have many tasks
   @OneToMany(() => Task, (task) => task.user)
   tasks: Task[]
 }

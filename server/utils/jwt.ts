@@ -6,6 +6,7 @@ export interface TokenPayload extends JWTPayload {
   username: string
 }
 
+// create a jwt token with the user info inside
 export async function signToken(
   payload: { userId: number; email: string; username: string },
   secret: string
@@ -18,6 +19,7 @@ export async function signToken(
     .sign(key)
 }
 
+// verify the token and get the data out of it
 export async function verifyToken(token: string, secret: string): Promise<TokenPayload> {
   const key = new TextEncoder().encode(secret)
   const { payload } = await jwtVerify(token, key)

@@ -11,6 +11,7 @@ import { User } from './User'
 export type TaskStatus = 'todo' | 'in_progress' | 'done'
 export type TaskPriority = 'low' | 'medium' | 'high'
 
+// task table - each task belongs to a user
 @Index('fk_task_user_idx', ['userId'], {})
 @Entity('task', { schema: 'sase_final_2026' })
 export class Task {
@@ -41,9 +42,11 @@ export class Task {
   @Column('datetime', { name: 'updated_at', nullable: true })
   updatedAt: Date | null
 
+  // used for soft deletes, we dont actually remove the row
   @Column('datetime', { name: 'deleted_at', nullable: true })
   deletedAt: Date | null
 
+  // many tasks can belong to one user
   @ManyToOne(() => User, (user) => user.tasks, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
