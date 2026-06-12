@@ -75,7 +75,7 @@ const year = new Date().getFullYear()
   <div class="container">
     <NuxtPage />
     <footer class="my-5 text-center text-muted small border-top border-secondary pt-3">
-      &copy; {{ year }} TaskFlow &mdash; Singidunum University
+      &copy; {{ year }} TaskFlow &mdash; Dayron Delgado
     </footer>
   </div>
 </template>
