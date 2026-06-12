@@ -12,10 +12,10 @@ const year = new Date().getFullYear()
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4 border-bottom border-secondary">
     <div class="container">
-      <RouterLink class="navbar-brand fw-bold" to="/">
-        <i class="fa-solid fa-note-sticky me-2 text-warning"></i>iNotes
+      <RouterLink class="navbar-brand fw-bold fs-4" to="/">
+        <i class="fa-solid fa-list-check me-2 text-primary"></i>TaskFlow
       </RouterLink>
       <button
         class="navbar-toggler"
@@ -37,8 +37,8 @@ const year = new Date().getFullYear()
           </li>
           <template v-if="loggedIn">
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/notes" active-class="active">
-                <i class="fa-solid fa-list me-1"></i>My Notes
+              <RouterLink class="nav-link" to="/tasks" active-class="active">
+                <i class="fa-solid fa-list-check me-1"></i>My Tasks
               </RouterLink>
             </li>
             <li class="nav-item">
@@ -66,7 +66,7 @@ const year = new Date().getFullYear()
           </template>
         </ul>
         <span class="navbar-text" v-if="loggedIn">
-          <i class="fa-solid fa-user me-1"></i>{{ (user as any)?.username }}
+          <i class="fa-solid fa-user me-1 text-primary"></i>{{ (user as any)?.username }}
         </span>
       </div>
     </div>
@@ -74,8 +74,8 @@ const year = new Date().getFullYear()
 
   <div class="container">
     <NuxtPage />
-    <footer class="my-4 text-center text-muted small">
-      &copy; {{ year }} iNotes &mdash; Singidunum University
+    <footer class="my-5 text-center text-muted small border-top border-secondary pt-3">
+      &copy; {{ year }} TaskFlow &mdash; Singidunum University
     </footer>
   </div>
 </template>

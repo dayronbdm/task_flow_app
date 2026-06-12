@@ -34,7 +34,7 @@ export default defineNuxtConfig({
         }
       ],
       meta: [
-        { name: 'description', content: 'iNotes — your personal note manager' }
+        { name: 'description', content: 'TaskFlow — manage your tasks with priority and status tracking' }
       ],
       htmlAttrs: { lang: 'en' },
       bodyAttrs: { 'data-bs-theme': 'dark' }

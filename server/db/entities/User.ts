@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Note } from './Note'
+import { Task } from './Task'
 
 @Index('uq_user_email', ['email'], { unique: true })
 @Entity('user', { schema: 'sase_final_2026' })
@@ -28,6 +28,6 @@ export class User {
   @Column('datetime', { name: 'last_login_at', nullable: true })
   lastLoginAt: Date | null
 
-  @OneToMany(() => Note, (note) => note.user)
-  notes: Note[]
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[]
 }

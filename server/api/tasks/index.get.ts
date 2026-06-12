@@ -1,15 +1,19 @@
 import { IsNull } from 'typeorm'
 import { AppDataSource } from '~~/server/db/data-source'
-import { Note } from '~~/server/db/entities/Note'
+import { Task } from '~~/server/db/entities/Task'
 
 export default defineEventHandler(async (event) => {
   const { user } = await getUserSession(event)
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })
 
-  const repo = AppDataSource.getRepository(Note)
+  const query = getQuery(event)
+  const repo = AppDataSource.getRepository(Task)
+
+  const where: any = { userId: (user as any).id, deletedAt: IsNull() }
+  if (query.status) where.status = query.status
+
   return repo.find({
-    select: { noteId: true, title: true, content: true, createdAt: true, updatedAt: true },
-    where: { userId: (user as any).id, deletedAt: IsNull() },
+    where,
     order: { createdAt: 'DESC' }
   })
 })

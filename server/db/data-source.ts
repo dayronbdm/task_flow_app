@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { User } from './entities/User'
-import { Note } from './entities/Note'
+import { Task } from './entities/Task'
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -10,5 +10,5 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  entities: [User, Note]
+  entities: [User, Task]
 })
