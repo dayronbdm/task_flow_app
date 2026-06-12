@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkcert --version)",
+      "Bash(brew install *)",
+      "Bash(mkcert -install)",
+      "Bash(mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1)",
+      "Bash(mkcert -CAROOT)",
+      "Bash(bun add *)",
+      "Bash(bun run *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
